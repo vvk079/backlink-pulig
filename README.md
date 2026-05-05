@@ -2,6 +2,54 @@
 
 Node.js + Express + TypeScript API for the backlink exchange WordPress plugin.
 
+## Quick Start with Docker
+
+```bash
+# Just run this one command - everything starts together!
+docker compose up -d
+
+# Check if running
+curl http://localhost:3001/health
+```
+
+That's it! API runs at `http://localhost:3001`
+
+## Docker Commands
+
+```bash
+# Start everything (Postgres + API)
+docker compose up -d
+
+# Stop everything
+docker compose down
+
+# View logs
+docker compose logs -f api
+
+# Rebuild after code changes
+docker compose up -d --build
+```
+
+## Local Development (Without Docker)
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start PostgreSQL via Docker (only DB)
+docker compose up -d postgres
+
+# Generate and run migrations
+pnpm db:generate
+pnpm db:migrate
+
+# Seed initial data
+pnpm db:seed
+
+# Start dev server
+pnpm dev
+```
+
 ## API Endpoints
 
 All endpoints are under `/api/v1/`
@@ -45,36 +93,28 @@ All endpoints are under `/api/v1/`
 - `POST /api/v1/matches/run` - Trigger triangular matching (requires X-API-Key)
 - `GET /api/v1/matches/stats` - Get match statistics (requires X-API-Key)
 
-## Local Development
+## Deploy to Cloud
 
+### Railway
+1. Go to [railway.app](https://railway.app)
+2. Connect GitHub repo
+3. Railway auto-detects Dockerfile + PostgreSQL
+4. Add environment variable: `CORS_ORIGIN = *`
+5. Deploy!
+
+### Render
+1. Go to [render.com](https://render.com)
+2. Create from Dockerfile
+3. Add PostgreSQL
+4. Deploy!
+
+### Docker on VPS
 ```bash
-# Install dependencies
-pnpm install
-
-# Start PostgreSQL via Docker
+# On your VPS
+git clone your-repo
+cd backlink-pulig/backend
 docker compose up -d
-
-# Generate and run migrations
-pnpm db:generate
-pnpm db:migrate
-
-# Seed initial data
-pnpm db:seed
-
-# Start dev server
-pnpm dev
 ```
-
-## Deploy to Render
-
-1. Fork this repo to GitHub
-2. Go to [render.com](https://render.com) → New → Blueprint
-3. Connect your GitHub repo
-4. Render will auto-detect the PostgreSQL service and Node.js service
-5. Set environment variables:
-   - `DATABASE_URL` - PostgreSQL connection string
-   - `NODE_ENV` = production
-6. Deploy!
 
 ## Health Check
 
