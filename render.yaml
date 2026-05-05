@@ -1,0 +1,26 @@
+database:
+  type: postgresql
+  url: ${DATABASE_URL}
+  poolSize: 10
+
+web:
+  command: pnpm start
+  healthCheckPath: /health
+  regions:
+    - oregon
+    - frankfurt
+
+routes:
+  - path: /health
+    command: echo "OK"
+
+# Environment variable reference
+envVars:
+  - key: DATABASE_URL
+    generateValue: true
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: 3001
+  - key: CORS_ORIGIN
+    value: "*"
